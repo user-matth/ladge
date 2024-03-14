@@ -1,0 +1,39 @@
+<div class="w-full flex h-screen overflow-hidden">
+  <div class="w-1/2 h-full bg-zinc-900">
+    <img src="https://images.unsplash.com/photo-1528334713982-2d1fe11a157a?q=80&w=2235&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+    alt=""
+    class="w-full h-full object-cover"
+    >
+  </div>
+  <div class="w-1/2 h-full bg-white flex flex-col items-center space-y-6 justify-center">
+    <div class="w-[350px] flex flex-col items-center space-y-6 justify-center">
+      <div class="flex flex-col space-y-2 items-center justify-center w-full">
+        <p class="text-2xl font-semibold tracking-tight">Entre na sua conta</p>
+        <p class="text-sm text-muted-foreground">Preencha com seus dados para entrar</p>
+      </div>
+      <form class="space-y-4 w-full">
+        <input #email class="w-full" hlmInput type="email" [(ngModel)]="userEmail" name="email" placeholder="nome@exemplo.com" />
+        <input #password class="w-full" hlmInput type="password" [(ngModel)]="userPassword" name="password" placeholder="senha" />
+        <button hlmBtn type="submit" size="sm" variant="default" class="w-full" (click)="login()">Entrar com E-mail</button>
+      </form>      
+      <div class="relative w-full">
+        <div class="absolute inset-0 flex items-center">
+          <span class="w-full border-t"></span>
+        </div>
+        <div class="relative flex justify-center text-xs uppercase">
+          <span class="bg-background px-2 text-muted-foreground">Ou continue com</span>
+        </div>
+      </div>
+      <div class="space-y-4 w-full">
+        <button hlmBtn size="sm" variant="outline" class="w-full" (click)="loginWithGoogle()">
+          <hlm-icon size="sm" class="mr-2" name="lucideMail" />
+          Google
+        </button>
+        <button hlmBtn size="sm" variant="outline" class="w-full" (click)="loginWithGitHub()">
+          <hlm-icon size="sm" class="mr-2" name="lucideGithub" />
+          Github
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

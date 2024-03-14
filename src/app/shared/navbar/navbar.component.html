@@ -1,0 +1,288 @@
+<div class="p-4 border-b relative flex justify-between" *ngIf="variant == 'panel'">
+  <brn-popover [state]="state()" (stateChanged)="stateChanged($event)" sideOffset="5" closeDelay="100">
+      <button id="edit-profile" variant="outline" brnPopoverTrigger hlmBtn class="w-[230px]">
+          <hlm-avatar variant="small" class="h-5 w-5">
+              <img src="{{ currentUser.photoURL ?? 'https://img.freepik.com/free-vector/realistic-grainy-texture-design_23-2149252552.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709942400&semt=ais' }}" alt="spartan logo. Resembling a spartanic shield" hlmAvatarImage />
+              <span class="bg-black text-white" hlmAvatarFallback>MA</span>
+          </hlm-avatar>
+          <span class="me-auto ms-2">
+              {{ currentUser.displayName }}
+          </span>
+          <hlm-icon size="sm" name="lucideChevronsUpDown" />
+      </button>
+      <brn-cmd *brnPopoverContent="let ctx" hlmPopoverContent hlm class="w-[230px] p-0">
+          <hlm-cmd-input-wrapper>
+              <hlm-icon name="lucideSearch" />
+              <input placeholder="Search Team..." brnCmdInput hlm />
+          </hlm-cmd-input-wrapper>
+          <div *brnCmdEmpty hlmCmdEmpty>No results found.</div>
+          <brn-cmd-list hlm>
+              <brn-cmd-group hlm>
+                  <span class="text-xs text-muted-foreground font-medium py-1.5 px-2">Conta Pessoal</span>
+                  <button
+                      brnCmdItem
+                      [value]="currentUser.email"
+                      (selected)="commandSelected(currentUser.email)"
+                      hlm
+                  >
+                      <hlm-avatar variant="small" class="h-4 w-4 me-2">
+                          <img src="{{ currentUser.photoURL ?? 'https://img.freepik.com/free-vector/realistic-grainy-texture-design_23-2149252552.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709942400&semt=ais' }}" alt="spartan logo. Resembling a spartanic shield" hlmAvatarImage />
+                          <span class="bg-black text-white" hlmAvatarFallback>MA</span>
+                      </hlm-avatar>
+                      {{ currentUser.displayName }}
+                  </button>
+              </brn-cmd-group>
+          </brn-cmd-list>
+      </brn-cmd>
+  </brn-popover>
+  <nav class="flex items-center space-x-4 lg:space-x-6 mx-6 me-auto">
+    <a class="text-sm font-medium transition-colors hover:text-primary" href="/examples/dashboard">Overview</a>
+    <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/examples/dashboard">Customers</a>
+    <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/examples/dashboard">Products</a>
+    <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/examples/dashboard">Settings</a>
+  </nav>
+  <div class="flex w-full items-center justify-end">
+      <hlm-avatar variant="medium" class="h-8 w-8 me-2" [brnMenuTriggerFor]="menu">
+          <img src="{{ currentUser.photoURL ?? 'https://img.freepik.com/free-vector/realistic-grainy-texture-design_23-2149252552.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709942400&semt=ais' }}" alt="spartan logo. Resembling a spartanic shield" hlmAvatarImage />
+          <span class="bg-black text-white" hlmAvatarFallback>MA</span>
+      </hlm-avatar>
+    </div>
+    <ng-template #menu>
+      <hlm-menu class="w-56">
+        <hlm-menu-label>My Account</hlm-menu-label>
+        <hlm-menu-separator />
+        <hlm-menu-group>
+          <button hlmMenuItem>
+            <hlm-icon name="lucideUser" hlmMenuIcon />
+            <span>Profile</span>
+            <hlm-menu-shortcut>⇧⌘P</hlm-menu-shortcut>
+          </button>
+
+          <button hlmMenuItem>
+            <hlm-icon name="lucideLayers" hlmMenuIcon />
+            <span>Billing</span>
+            <hlm-menu-shortcut>⌘B</hlm-menu-shortcut>
+          </button>
+
+          <button hlmMenuItem>
+            <hlm-icon name="lucideCog" hlmMenuIcon />
+            <span>Settings</span>
+            <hlm-menu-shortcut>⌘S</hlm-menu-shortcut>
+          </button>
+
+          <button hlmMenuItem>
+            <hlm-icon name="lucideKeyboard" hlmMenuIcon />
+            <span>Keyboard Shortcuts</span>
+            <hlm-menu-shortcut>⌘K</hlm-menu-shortcut>
+          </button>
+        </hlm-menu-group>
+
+        <hlm-menu-separator />
+
+        <hlm-menu-group>
+          <button hlmMenuItem>
+            <hlm-icon name="lucideUserCircle" hlmMenuIcon />
+            <span>Team</span>
+            <hlm-menu-shortcut>⌘B</hlm-menu-shortcut>
+          </button>
+
+          <button hlmMenuItem [brnMenuTriggerFor]="invite">
+            <hlm-icon name="lucideSmile" hlmMenuIcon />
+            <span>Invite Users</span>
+            <hlm-menu-item-sub-indicator />
+          </button>
+
+          <button hlmMenuItem>
+            <hlm-icon name="lucidePlus" hlmMenuIcon />
+            <span>New Team</span>
+            <hlm-menu-shortcut>⌘+T</hlm-menu-shortcut>
+          </button>
+        </hlm-menu-group>
+
+        <hlm-menu-separator />
+
+        <hlm-menu-group>
+          <button hlmMenuItem>
+            <hlm-icon name="lucideGithub" hlmMenuIcon />
+            <span>Github</span>
+          </button>
+
+          <button hlmMenuItem>
+            <hlm-icon name="lucideHelpCircle" hlmMenuIcon />
+            <span>Support</span>
+          </button>
+
+          <button hlmMenuItem disabled>
+            <hlm-icon name="lucideCode" hlmMenuIcon />
+            <span>API</span>
+          </button>
+        </hlm-menu-group>
+
+        <hlm-menu-separator />
+
+        <button hlmMenuItem (click)="logout()">
+          <hlm-icon name="lucideLogOut" hlmMenuIcon />
+          <span>Logout</span>
+          <hlm-menu-shortcut>⇧⌘Q</hlm-menu-shortcut>
+        </button>
+      </hlm-menu>
+    </ng-template>
+
+    <ng-template #invite>
+      <hlm-sub-menu>
+        <button hlmMenuItem>
+          <hlm-icon name="lucideMail" hlmMenuIcon />
+          Email
+        </button>
+
+        <button hlmMenuItem>
+          <hlm-icon name="lucideMessageSquare" hlmMenuIcon />
+          Message
+        </button>
+        <hlm-menu-separator />
+        <button hlmMenuItem>
+          <hlm-icon name="lucidePlusCircle" hlmMenuIcon />
+          <span>More</span>
+        </button>
+      </hlm-sub-menu>
+    </ng-template>
+</div>
+
+<div class="p-4 border-b relative flex justify-between" *ngIf="variant == 'admin'">
+  <brn-popover [state]="state()" (stateChanged)="stateChanged($event)" sideOffset="5" closeDelay="100">
+      <button id="edit-profile" variant="outline" brnPopoverTrigger hlmBtn class="w-[230px]">
+          <hlm-avatar variant="small" class="h-5 w-5">
+              <img src="{{ currentUser.photoURL ?? 'https://img.freepik.com/free-vector/realistic-grainy-texture-design_23-2149252552.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709942400&semt=ais' }}" alt="spartan logo. Resembling a spartanic shield" hlmAvatarImage />
+              <span class="bg-black text-white" hlmAvatarFallback>MA</span>
+          </hlm-avatar>
+          <span class="me-auto ms-2">
+              {{ currentUser.displayName }}
+          </span>
+          <hlm-icon size="sm" name="lucideChevronsUpDown" />
+      </button>
+      <brn-cmd *brnPopoverContent="let ctx" hlmPopoverContent hlm class="w-[230px] p-0">
+          <hlm-cmd-input-wrapper>
+              <hlm-icon name="lucideSearch" />
+              <input placeholder="Search Team..." brnCmdInput hlm />
+          </hlm-cmd-input-wrapper>
+          <div *brnCmdEmpty hlmCmdEmpty>No results found.</div>
+          <brn-cmd-list hlm>
+              <brn-cmd-group hlm>
+                  <span class="text-xs text-muted-foreground font-medium py-1.5 px-2">Conta Pessoal</span>
+                  <button
+                      brnCmdItem
+                      [value]="currentUser.email"
+                      (selected)="commandSelected(currentUser.email)"
+                      hlm
+                  >
+                      <hlm-avatar variant="small" class="h-4 w-4 me-2">
+                          <img src="{{ currentUser.photoURL ?? 'https://img.freepik.com/free-vector/realistic-grainy-texture-design_23-2149252552.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709942400&semt=ais' }}" alt="spartan logo. Resembling a spartanic shield" hlmAvatarImage />
+                          <span class="bg-black text-white" hlmAvatarFallback>MA</span>
+                      </hlm-avatar>
+                      {{ currentUser.displayName }}
+                  </button>
+              </brn-cmd-group>
+          </brn-cmd-list>
+      </brn-cmd>
+  </brn-popover>
+  <nav class="flex items-center space-x-4 lg:space-x-6 mx-6 me-auto">
+    <a class="text-sm font-medium transition-colors hover:text-primary" href="/examples/dashboard">Overview</a>
+    <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/examples/dashboard">Customers</a>
+    <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/examples/dashboard">Products</a>
+    <a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="/examples/dashboard">Settings</a>
+  </nav>
+  <div class="flex w-full items-center justify-end">
+      <hlm-avatar variant="small" class="h-6 w-6 me-2" [brnMenuTriggerFor]="menu">
+          <img src="{{ currentUser.photoURL ?? 'https://img.freepik.com/free-vector/realistic-grainy-texture-design_23-2149252552.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709942400&semt=ais' }}" alt="spartan logo. Resembling a spartanic shield" hlmAvatarImage />
+          <span class="bg-black text-white" hlmAvatarFallback>MA</span>
+      </hlm-avatar>
+    </div>
+    <ng-template #menu>
+      <hlm-menu class="w-56">
+        <hlm-menu-label>My Account</hlm-menu-label>
+        <hlm-menu-separator />
+        <hlm-menu-group>
+          <button hlmMenuItem>
+            <hlm-icon name="lucideUser" hlmMenuIcon />
+            <span>Profile</span>
+            <hlm-menu-shortcut>⇧⌘P</hlm-menu-shortcut>
+          </button>
+
+          <button hlmMenuItem>
+            <hlm-icon name="lucideCog" hlmMenuIcon />
+            <span>Settings</span>
+            <hlm-menu-shortcut>⌘S</hlm-menu-shortcut>
+          </button>
+
+          <button hlmMenuItem>
+            <hlm-icon name="lucideKeyboard" hlmMenuIcon />
+            <span>Keyboard Shortcuts</span>
+            <hlm-menu-shortcut>⌘K</hlm-menu-shortcut>
+          </button>
+        </hlm-menu-group>
+
+        <hlm-menu-separator />
+
+        <hlm-menu-group>
+          <button hlmMenuItem>
+            <hlm-icon name="lucideGithub" hlmMenuIcon />
+            <span>Github</span>
+          </button>
+
+          <button hlmMenuItem>
+            <hlm-icon name="lucideHelpCircle" hlmMenuIcon />
+            <span>Support</span>
+          </button>
+
+          <button hlmMenuItem disabled>
+            <hlm-icon name="lucideCode" hlmMenuIcon />
+            <span>API</span>
+          </button>
+        </hlm-menu-group>
+
+        <hlm-menu-separator />
+
+        <a hlmMenuItem href="/">
+          <hlm-icon name="lucideLogOut" hlmMenuIcon />
+          <span>Logout</span>
+          <hlm-menu-shortcut>⇧⌘Q</hlm-menu-shortcut>
+        </a>
+      </hlm-menu>
+    </ng-template>
+
+    <ng-template #invite>
+      <hlm-sub-menu>
+        <button hlmMenuItem>
+          <hlm-icon name="lucideMail" hlmMenuIcon />
+          Email
+        </button>
+
+        <button hlmMenuItem>
+          <hlm-icon name="lucideMessageSquare" hlmMenuIcon />
+          Message
+        </button>
+        <hlm-menu-separator />
+        <button hlmMenuItem>
+          <hlm-icon name="lucidePlusCircle" hlmMenuIcon />
+          <span>More</span>
+        </button>
+      </hlm-sub-menu>
+    </ng-template>
+</div>
+
+<div class="fixed top-0 w-full bg-background/0 backdrop-blur-xl z-10" *ngIf="variant == 'public'">
+  <div class="w-full bg-black text-white flex items-center justify-center h-8">
+    <p class="text-center text-sm font-medium transition-colors">We're working to lauch beta. Soon available.</p>
+  </div>
+  <nav class="flex items-center justify-between space-x-4 lg:space-x-6 w-full relative p-6">
+    <a class="text-sm font-medium transition-colors hover:text-primary flex items-center gap-2" href="/">
+      <img src="assets/img/Logomark.png" alt="" width="34" height="34">
+      <span class="text-lg font-semibold text-white">Ladge</span>
+    </a>
+    <div class="flex items-center space-x-4 ms-auto">
+      <a class="text-sm font-medium text-white underline transition-colors hover:underline" href="/examples/dashboard">About us</a>
+      <a class="text-sm font-medium text-white transition-colors hover:underline" href="/examples/dashboard">Our Product</a>
+      <a class="text-sm font-medium text-white transition-colors hover:underline" href="/auth/login">Login</a>
+    </div>
+  </nav>
+</div>
