@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, signal } from '@angular/core';
-import { CommonModule, NgForOf } from '@angular/common';
+import { Component, Inject, Input, OnInit, signal } from '@angular/core';
+import { CommonModule, DOCUMENT, NgForOf } from '@angular/common';
 import { BrnCommandImports } from '@spartan-ng/ui-command-brain';
 import { HlmCommandImports } from '@spartan-ng/ui-command-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
@@ -28,6 +28,10 @@ import {
   lucidePlus,
   lucidePlusCircle,
   lucideHelpCircle,
+  lucideSun,
+  lucideMoon,
+  lucideSettings,
+  lucidePalette
 } from '@ng-icons/lucide';
 import { BrnMenuTriggerDirective } from '@spartan-ng/ui-menu-brain';
 import {
@@ -92,6 +96,10 @@ type Framework = { label: string; value: string };
     lucideMail,
     lucideMessageSquare,
     lucidePlusCircle,
+    lucideSun,
+    lucideMoon,
+    lucideSettings,
+    lucidePalette
   })],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
@@ -101,6 +109,7 @@ export class NavbarComponent implements OnInit {
   currentUser: any | null = null;
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private router: Router
   ) {
   }
@@ -135,5 +144,13 @@ export class NavbarComponent implements OnInit {
   logout() {
     Cookies.remove('user');
     this.router.navigate(['/']);
+  }
+
+  toggleMode(dark: boolean): void {
+    if (dark) {
+      this.document.body.classList.remove('dark');
+    } else {
+      this.document.body.classList.add('dark');
+    }
   }
 }

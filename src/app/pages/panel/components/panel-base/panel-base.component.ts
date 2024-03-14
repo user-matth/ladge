@@ -10,7 +10,6 @@ import { RouterOutlet } from '@angular/router';
     RouterOutlet
   ],
   templateUrl: './panel-base.component.html',
-  styleUrls: ['./panel-base.component.css']
 })
 export class PanelBaseComponent implements OnInit {
 

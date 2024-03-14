@@ -35,11 +35,11 @@ import { ClassValue } from 'clsx';
 	encapsulation: ViewEncapsulation.None,
 })
 export class HlmTdComponent {
-	private readonly _columnDef? = inject(BrnColumnDefComponent, { optional: true });
-	protected readonly truncate = input(false, { transform: booleanAttribute });
+	public _columnDef? = inject(BrnColumnDefComponent, { optional: true });
+	public truncate = input(false, { transform: booleanAttribute });
 
-	public readonly _userClass = input<ClassValue>('', { alias: 'class' });
-	protected readonly _computedClass = computed(() =>
-		hlm('flex flex-none p-4 items-center [&:has([role=checkbox])]:pr-0', this._columnDef?.class(), this._userClass()),
+	public _userClass = input<ClassValue>('', { alias: 'class' });
+	public _computedClass = computed(() =>
+		hlm('flex flex-none p-4 items-center [&:has([role=checkbox])]:pr-0', this._userClass()),
 	);
 }
