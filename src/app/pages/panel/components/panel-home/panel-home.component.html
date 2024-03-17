@@ -1,8 +1,8 @@
-<h2 class="text-3xl font-semibold tracking-tight text-foreground">Panel</h2>
+<h2 class="text-3xl font-semibold tracking-tight text-foreground">Overview</h2>
 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6">
   <div class="rounded-lg border border-input bg-card text-card-foreground shadow-sm">
     <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-      <h3 class="tracking-tight text-sm font-medium">Total News</h3>
+      <h3 class="tracking-tight text-sm font-medium">All News</h3>
     </div>
     <div class="p-6 pt-0">
       <div class="text-2xl font-bold">{{ all_news ? all_news.count : 0 }}</div>
@@ -18,24 +18,6 @@
       <p class="text-xs text-muted-foreground"></p>
     </div>
   </div>
-  <!-- <div class="rounded-lg border border-input bg-card text-card-foreground shadow-sm">
-    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-      <h3 class="tracking-tight text-sm font-medium">Sales</h3>
-    </div>
-    <div class="p-6 pt-0">
-      <div class="text-2xl font-bold">+12,234</div>
-      <p class="text-xs text-muted-foreground">+19% from last month</p>
-    </div>
-  </div>
-  <div class="rounded-lg border border-input bg-card text-card-foreground shadow-sm">
-    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-      <h3 class="tracking-tight text-sm font-medium">Active Now</h3>
-    </div>
-    <div class="p-6 pt-0">
-      <div class="text-2xl font-bold">+573</div>
-      <p class="text-xs text-muted-foreground">+201 since last hour</p>
-    </div>
-  </div> -->
 </div>
 <h2 class="text-xl font-medium tracking-tight mt-6 text-foreground">Notícias</h2>
 <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3 mt-6" *ngIf="news">

@@ -6,6 +6,7 @@ import { AdminHomeComponent } from './pages/admin/components/admin-home/admin-ho
 import { AdminBaseComponent } from './pages/admin/components/admin-base/admin-base.component';
 import { PublicBaseComponent } from './pages/public/components/public-base/public-base.component';
 import { AuthGuard } from './services/auth-guard/auth.guard';
+import { PanelRepositoriesComponent } from './pages/panel/components/panel-repositories/panel-repositories.component';
 
 export const routes: Routes = [
     {
@@ -21,6 +22,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
             { path: '', component: PanelHomeComponent },
+            { path: 'repos', component: PanelRepositoriesComponent },
         ],
     },
     {
