@@ -123,7 +123,7 @@ export class PanelRepositoriesComponent implements OnInit {
       .subscribe(commits => {
         if (commits.length > 0) {
           const index = this.repos.findIndex(r => r.id === repo.id);
-          this.repos[index].lastCommit = commits[0]; // Atualiza o objeto do repositório com o último commit
+          this.repos[index].lastCommit = commits[0];
         }
       });
   }

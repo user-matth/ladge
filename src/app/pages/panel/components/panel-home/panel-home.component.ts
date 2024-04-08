@@ -28,13 +28,13 @@ export class PanelHomeComponent implements OnInit {
   getEnvironmentNews() {
     this.http.get('https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=12&busca=meio%2Fambiente').subscribe(news => {
       this.news = news;
-      console.log(this.news);
     });
   }
 
   getAllNews() {
-    this.http.get('https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=12').subscribe(all_news => {
+    this.http.get('https://servicodados.ibge.gov.br/api/v3/noticias').subscribe(all_news => {
       this.all_news = all_news;
+      console.log(this.all_news);
     });
   }
 
