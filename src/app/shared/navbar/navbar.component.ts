@@ -107,6 +107,12 @@ type Framework = { label: string; value: string };
 export class NavbarComponent implements OnInit {
   @Input() public variant = 'public';
   currentUser: any | null = null;
+  navItems = [
+    { label: 'Overview', path: '/panel', active: true},
+    { label: 'Repositories', path: '/panel/repos', active: false },
+    { label: 'Products', path: '/panel', active: false },
+    { label: 'Settings', path: '/panel', active: false },
+  ]
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -122,6 +128,7 @@ export class NavbarComponent implements OnInit {
     const user = Cookies.get('user');
     if (user) {
       this.currentUser = JSON.parse(user);
+      console.log(this.currentUser);
     }
   }
 
@@ -151,6 +158,22 @@ export class NavbarComponent implements OnInit {
       this.document.body.classList.remove('dark');
     } else {
       this.document.body.classList.add('dark');
+    }
+  }
+
+  toggleNavItems(itemlabel: string) {
+    this.navItems.forEach(item => {
+      if (item.label === itemlabel) {
+        item.active = true;
+      } else {
+        item.active = false;
+      }
+    });
+    // I want to redirect to the selected path
+    // the object is possibly 'undefined'
+    const selectedItem = this.navItems.find(item => item.active);
+    if (selectedItem) {
+      this.router.navigate([selectedItem.path]);
     }
   }
 }

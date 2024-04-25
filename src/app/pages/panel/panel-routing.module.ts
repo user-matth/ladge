@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PanelHomeComponent } from './components/panel-home/panel-home.component';
+import { PanelRepositoriesComponent } from './components/panel-repositories/panel-repositories.component';
 
 const routes: Routes = [
   { path: '', component: PanelHomeComponent },

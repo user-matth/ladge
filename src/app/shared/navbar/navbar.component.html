@@ -36,10 +36,13 @@
       </brn-cmd>
   </brn-popover>
   <nav class="flex items-center space-x-4 lg:space-x-6 mx-6 me-auto">
-    <a class="text-sm font-medium text-foreground transition-colors hover:text-primary cursor-pointer">Overview</a>
-    <a class="text-sm font-medium text-foreground text-muted-foreground transition-colors hover:text-primary cursor-pointer">Customers</a>
-    <a class="text-sm font-medium text-foreground text-muted-foreground transition-colors hover:text-primary cursor-pointer">Products</a>
-    <a class="text-sm font-medium text-foreground text-muted-foreground transition-colors hover:text-primary cursor-pointer">Settings</a>
+    <a class="text-sm font-medium transition-colors hover:text-primary cursor-pointer" 
+      *ngFor="let item of navItems" 
+      [ngClass]="item.active ? 'text-foreground' : 'text-muted-foreground'" 
+      (click)="toggleNavItems(item.label)" 
+      >
+      {{ item.label }}
+    </a>
   </nav>
   <div class="flex w-full items-center justify-end">
       <hlm-avatar variant="medium" class="h-8 w-8 me-2" [brnMenuTriggerFor]="menu">
