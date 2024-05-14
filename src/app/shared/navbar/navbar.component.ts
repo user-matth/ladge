@@ -109,9 +109,7 @@ export class NavbarComponent implements OnInit {
   currentUser: any | null = null;
   navItems = [
     { label: 'Overview', path: '/panel', active: true},
-    { label: 'Repositories', path: '/panel/repos', active: false },
-    { label: 'Products', path: '/panel', active: false },
-    { label: 'Settings', path: '/panel', active: false },
+    { label: 'Files', path: '/panel/files', active: false },
   ]
 
   constructor(
@@ -128,7 +126,6 @@ export class NavbarComponent implements OnInit {
     const user = Cookies.get('user');
     if (user) {
       this.currentUser = JSON.parse(user);
-      console.log(this.currentUser);
     }
   }
 

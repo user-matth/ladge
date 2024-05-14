@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/public/components/home/home.component';
-import { PanelHomeComponent } from './pages/panel/components/panel-home/panel-home.component';
 import { PanelBaseComponent } from './pages/panel/components/panel-base/panel-base.component';
 import { AdminHomeComponent } from './pages/admin/components/admin-home/admin-home.component';
 import { AdminBaseComponent } from './pages/admin/components/admin-base/admin-base.component';
 import { PublicBaseComponent } from './pages/public/components/public-base/public-base.component';
 import { AuthGuard } from './services/auth-guard/auth.guard';
-import { PanelRepositoriesComponent } from './pages/panel/components/panel-repositories/panel-repositories.component';
+import { PanelHomeComponent } from './pages/panel/components/home/home.component';
+import { FilesComponent } from './pages/panel/components/files/files.component';
 
 export const routes: Routes = [
     {
@@ -22,7 +22,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
             { path: '', component: PanelHomeComponent },
-            { path: 'repos', component: PanelRepositoriesComponent },
+            { path: 'files', component: FilesComponent }
         ],
     },
     {

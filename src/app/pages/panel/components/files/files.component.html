@@ -1,0 +1,64 @@
+<div class="flex justify-between items-center">
+    <h2 class="text-3xl font-semibold tracking-tight text-foreground">Files</h2>
+    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2">
+        Add new
+    </button>
+</div>
+
+<div class="rounded-lg border border-input bg-card text-card-foreground shadow-sm mt-6">
+    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+        <h3 class="tracking-tight text-sm font-medium">Files total amount</h3>
+    </div>
+    <div class="p-6 pt-0">
+        <div class="text-2xl font-bold">{{ files ? files.data.length : 0 }}</div>
+        <p class="text-xs text-muted-foreground"></p>
+    </div>
+</div>
+
+<div class="relative overflow-x-auto mt-6">
+    <table class="w-full caption-bottom text-sm">
+        <thead class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+            <tr>
+                <th scope="col" class="h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]"></th>
+                <th scope="col" class="h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                    Purpose
+                </th>
+                <th scope="col" class="h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                    Name
+                </th>
+                <th scope="col" class="h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                    Status
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if(files.data.length > 0) {
+                @for (file of files.data; track file.id) {
+                    <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                        <th class="p-2 align-middle text-start [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] font-medium">
+                            {{ file.id }}
+                        </th>
+                        <td class="p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            {{ file.purpose }}
+                        </td>
+                        <td class="p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            {{ file.filename }}
+                        </td>
+                        <td class="p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                            @if(file.status === 'uploaded') {
+                                <span class="bg-yellow-500 w-2.5 h-2.5 block rounded-full"></span>
+                            } @else if(file.status === 'processed') {
+                                <span class="bg-green-700 w-2.5 h-2.5 block rounded-full"></span>
+                            } @else if(file.status === 'error') {
+                                <span class="bg-red-700 w-2.5 h-2.5 block rounded-full"></span>
+                            }
+                        </td>
+                    </tr>
+                } @empty {
+                    Empty list of users
+                }
+            }
+        </tbody>
+        <caption class="mt-4 text-sm text-muted-foreground">A list of your recent files.</caption>
+    </table>
+</div>
