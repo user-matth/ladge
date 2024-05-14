@@ -6,18 +6,18 @@ import { IbgeService } from '../../services/ibge/ibge.service';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { FilesComponent } from './components/files/files.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    FilesComponent
   ],
   imports: [
     CommonModule,
     PanelRoutingModule,
     HttpClientModule,
     BrowserModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     IbgeService

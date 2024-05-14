@@ -110,6 +110,7 @@ export class NavbarComponent implements OnInit {
   navItems = [
     { label: 'Overview', path: '/panel', active: true},
     { label: 'Files', path: '/panel/files', active: false },
+    { label: 'Fine Tune', path: '/panel/fine-tune', active: false },
   ]
 
   constructor(

@@ -36,7 +36,7 @@
       </brn-cmd>
   </brn-popover>
   <nav class="flex items-center space-x-4 lg:space-x-6 mx-6 me-auto">
-    <a class="text-sm font-medium transition-colors hover:text-primary cursor-pointer" 
+    <a class="text-sm font-medium transition-colors hover:text-primary cursor-pointer text-nowrap" 
       *ngFor="let item of navItems" 
       [ngClass]="item.active ? 'text-foreground' : 'text-muted-foreground'" 
       (click)="toggleNavItems(item.label)" 

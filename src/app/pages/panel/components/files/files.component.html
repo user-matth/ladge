@@ -1,6 +1,6 @@
 <div class="flex justify-between items-center">
     <h2 class="text-3xl font-semibold tracking-tight text-foreground">Files</h2>
-    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2">
+    <button data-modal-target="default-modal" data-modal-toggle="default-modal" type="button" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2">
         Add new
     </button>
 </div>
@@ -61,4 +61,50 @@
         </tbody>
         <caption class="mt-4 text-sm text-muted-foreground">A list of your recent files.</caption>
     </table>
+</div>
+
+
+<div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow p-6">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between rounded-t">
+                <h3 class="text-lg font-semibold leading-none tracking-tight">
+                    Create a file
+                </h3>
+                <button type="button" class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground" data-modal-hide="default-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="space-y-4 py-5">
+                <p class="text-sm text-muted-foreground">
+                    Training data. Add a jsonl file to use for training.
+                </p>
+                <form [formGroup]="formGroup">
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-right" for="name">File</label>
+                    <input type="file" (change)="fileSelected($event)" class="flex h-10 w-full rounded-md border border-input bg-background p-0 mb-3 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"/>
+
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-right" for="name">Purpose</label>
+                    <select formControlName="purpose" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 col-span-3">
+                        <option value="fine-tune">Fine-tune</option>
+                        <option value="assistants">Assistants</option>
+                        <option value="batch">Batch</option>
+                        <option value="user_data">User Data</option>
+                        <option value="responses">Responses</option>
+                        <option value="vision">Vision</option>
+                      </select>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+                <button data-modal-hide="default-modal" type="button" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2" (click)="uploadSelectedFile()">Send</button>
+                <button data-modal-hide="default-modal" type="button" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2">Decline</button>
+            </div>
+        </div>
+    </div>
 </div>

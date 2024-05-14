@@ -7,6 +7,7 @@ import { PublicBaseComponent } from './pages/public/components/public-base/publi
 import { AuthGuard } from './services/auth-guard/auth.guard';
 import { PanelHomeComponent } from './pages/panel/components/home/home.component';
 import { FilesComponent } from './pages/panel/components/files/files.component';
+import { FineTuneComponent } from './pages/panel/components/fine-tune/fine-tune.component';
 
 export const routes: Routes = [
     {
@@ -22,7 +23,8 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
             { path: '', component: PanelHomeComponent },
-            { path: 'files', component: FilesComponent }
+            { path: 'files', component: FilesComponent },
+            { path: 'fine-tune', component: FineTuneComponent },
         ],
     },
     {

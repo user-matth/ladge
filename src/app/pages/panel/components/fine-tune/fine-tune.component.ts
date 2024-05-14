@@ -9,29 +9,47 @@ import {
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-files',
+  selector: 'app-fine-tune',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './files.component.html',
-  styleUrls: ['./files.component.css']
+  templateUrl: './fine-tune.component.html',
+  styleUrls: ['./fine-tune.component.css']
 })
-export class FilesComponent implements OnInit {
+export class FineTuneComponent implements OnInit {
 
   files: any;
+  models: any;
+  fineTunes: any;
   fileToUpload: File | null = null;
   formGroup!: FormGroup;
+  drawerOpen = false;
+  selectedItem: any = null;
 
   constructor(
     private http: HttpClient,
     private fb: FormBuilder
   ) {
     this.formGroup = this.fb.group({
-      purpose: ['fine-tune']
+      model: [''],
+      file: [''],
     });
   }
 
   ngOnInit() {
+    this.getAllModels();
     this.getAllFiles();
+    this.getAllFineTunes();
+  }
+
+  getAllModels() {
+    this.http.get<any>('https://api.openai.com/v1/models', {
+      headers: {
+        "Authorization": `Bearer ${environment.OPENAI_API_KEY}`
+      }
+    }).subscribe(models => {
+      this.models = models;
+      console.log(models);
+    });
   }
 
   getAllFiles() {
@@ -42,6 +60,17 @@ export class FilesComponent implements OnInit {
     }).subscribe(files => {
       this.files = files;
       console.log(files);
+    });
+  }
+
+  getAllFineTunes() {
+    this.http.get<any>('https://api.openai.com/v1/fine_tuning/jobs', {
+      headers: {
+        "Authorization": `Bearer ${environment.OPENAI_API_KEY}`
+      }
+    }).subscribe(fineTunes => {
+      this.fineTunes = fineTunes;
+      console.log(fineTunes);
     });
   }
 
@@ -82,10 +111,24 @@ export class FilesComponent implements OnInit {
   }
   
   uploadSelectedFile(): void {
-    if (this.fileToUpload && this.formGroup.get('purpose')?.value) {
-      this.uploadFile(this.fileToUpload, this.formGroup.get('purpose')?.value);
+    if (this.fileToUpload && this.formGroup.get('model')?.value) {
+      this.uploadFile(this.fileToUpload, this.formGroup.get('model')?.value);
     } else {
-      alert('Please select a file and enter a purpose.');
+      alert('Please select a file and enter a model.');
+    }
+  }
+
+  getFileName(fileId: string) {
+    if(!this.files) {
+      return '-';
+    } 
+    return this.files.data.find((file: any) => file.id === fileId)?.filename;
+  }
+
+  toggleDrawer(item?: any) {
+    this.drawerOpen = !this.drawerOpen;
+    if (item) {
+      this.selectedItem = item;
     }
   }
 

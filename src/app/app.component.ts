@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -6,6 +7,7 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [
     RouterOutlet,
+    FormsModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
