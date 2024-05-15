@@ -26,7 +26,13 @@
     </div>
   </div>
 </div>
-<h2 class="text-xl font-medium tracking-tight mt-6 text-foreground">Notícias</h2>
+
+<h2 class="text-xl font-medium tracking-tight mt-6 mb-3 text-foreground">Last fine-tune <span class="text-xl font-medium tracking-tight mt-6 mb-3 text-muted-foreground">{{ fineTuneData?.model }}</span></h2>
+<div class="h-[20rem!important]">
+  <canvas #mainChart></canvas>
+</div>
+
+<h2 class="text-xl font-medium tracking-tight mt-6 text-foreground">Latest News</h2>
 <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3 mt-6" *ngIf="news">
   <a class="flex flex-col items-start border-input justify-between gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent"
     *ngFor="let news of news.items"

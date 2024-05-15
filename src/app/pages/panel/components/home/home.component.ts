@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IbgeService } from '../../../../services/ibge/ibge.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../../environments/environment.development';
+import { Chart, registerables } from 'chart.js';
 
 @Component({
   selector: 'app-home',
@@ -15,14 +17,23 @@ import { CommonModule } from '@angular/common';
 })
 export class PanelHomeComponent implements OnInit {
 
+  @ViewChild('mainChart') mainChart!: ElementRef<HTMLCanvasElement>;
+
   news: any;
   all_news: any;
+  fineTuneData: any;
+  fineTuneEvents: any;
+  metricsData: any;
+  chart!: Chart; 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    Chart.register(...registerables);
+  }
 
   ngOnInit() {
     this.getEnvironmentNews();
     this.getAllNews();
+    this.retrieveFineTune();
   }
 
   getEnvironmentNews() {
@@ -70,6 +81,96 @@ export class PanelHomeComponent implements OnInit {
     link.download = filename;
     link.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  retrieveFineTune() { 
+    var id = 'ftjob-v9Q43cG1UN5BbMFeg6MXE7Ak';
+    this.http.get<any>(`https://api.openai.com/v1/fine_tuning/jobs/${id}`, {
+      headers: {
+        "Authorization": `Bearer ${environment.OPENAI_API_KEY}`
+      }
+    }).subscribe(fineTuneData => {
+      this.fineTuneData = fineTuneData;
+      console.log(fineTuneData);
+    });
+    this.retrieveFineTuneEvents(id);
+  }
+
+  retrieveFineTuneEvents(id: string) {
+    this.http.get<any>(`https://api.openai.com/v1/fine_tuning/jobs/${id}/events`, {
+      headers: {
+        "Authorization": `Bearer ${environment.OPENAI_API_KEY}`
+      }
+    }).subscribe(fineTuneEvents => {
+      this.fineTuneEvents = fineTuneEvents;
+      this.processMetricsData(fineTuneEvents);
+    });
+  }
+
+  processMetricsData(response: any) {
+    const metrics = response.data.filter((event: any) => event.type === 'metrics');
+    this.metricsData = {
+      steps: metrics.map((m: any) => m.data.step),
+      trainLosses: metrics.map((m: any) => m.data.train_loss),
+      trainAccuracies: metrics.map((m: any) => m.data.train_mean_token_accuracy),
+      totalSteps: metrics.map((m: any) => m.data.total_steps)
+    };
+    this.setupChart();
+  }
+
+  setupChart(): void {
+    const maxLoss = Math.max(...this.metricsData?.trainLosses);
+    const suggestedMax = maxLoss + (maxLoss * 0.1);
+    const ctx = this.mainChart.nativeElement.getContext('2d');
+    this.chart = new Chart(ctx!, {
+      type: 'line',
+      data: {
+        labels: this.metricsData?.steps,
+        datasets: [{
+          data: this.metricsData?.trainLosses,
+          borderColor: '#406FDC',
+          borderWidth: 2,
+          pointRadius: 0,
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: suggestedMax,
+            grid: {
+              color: '#B3B3B3',
+            }
+          },
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Steps'
+            },
+            grid: {
+              display:false
+            }
+          }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        elements: {
+          line: {
+            tension: .2
+          }
+        },
+        hover: {
+          mode: 'index',
+          intersect: false,
+        },
+        plugins: {
+          legend: {
+              display: false
+          },
+        }
+      }
+    });
   }
 
 }

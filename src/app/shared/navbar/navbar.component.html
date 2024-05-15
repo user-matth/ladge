@@ -1,5 +1,6 @@
-<div class="p-4 border-b border-input fixed top-0 left-0 w-full flex justify-between bg-background" *ngIf="variant == 'panel' || variant == 'admin'">
-  <brn-popover [state]="state()" (stateChanged)="stateChanged($event)" sideOffset="5" closeDelay="100">
+<div class="p-4 border-b border-input fixed top-0 left-0 w-full flex justify-between bg-background" style="z-index: 10;" *ngIf="variant == 'panel'">
+  <div class="hidden md:flex lg:flex">
+    <brn-popover [state]="state()" (stateChanged)="stateChanged($event)" sideOffset="5" closeDelay="100">
       <button id="edit-profile" variant="outline" brnPopoverTrigger hlmBtn class="w-[230px] text-foreground">
           <hlm-avatar variant="small" class="h-5 w-5">
               <img src="{{ currentUser.photoURL ?? 'https://img.freepik.com/free-vector/realistic-grainy-texture-design_23-2149252552.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709942400&semt=ais' }}" alt="spartan logo. Resembling a spartanic shield" hlmAvatarImage />
@@ -35,7 +36,9 @@
           </brn-cmd-list>
       </brn-cmd>
   </brn-popover>
-  <nav class="flex items-center space-x-4 lg:space-x-6 mx-6 me-auto">
+  </div>
+  
+  <nav class="flex items-center space-x-4 lg:space-x-6 md:mx-6 lg:mx-6 me-auto">
     <a class="text-sm font-medium transition-colors hover:text-primary cursor-pointer text-nowrap" 
       *ngFor="let item of navItems" 
       [ngClass]="item.active ? 'text-foreground' : 'text-muted-foreground'" 

@@ -13,7 +13,58 @@
         </button>
     </div>
 
-    <div class="relative overflow-x-auto mt-6">
+    <div class="block lg:hidden md:hidden mt-6">
+        @if(fineTunes) {
+            @for (fineTune of fineTunes.data; track fineTune.id; let i = $index) {
+                @if(fineTune.status == 'succeeded') {
+                    <div class="flex items-center justify-center w-full" (click)="toggleDrawer(fineTune)">
+                        <div class="rounded-lg border bg-card text-card-foreground shadow w-full mb-3">
+                            <div class="flex flex-col space-y-1.5 p-6">
+                                <h3 class="font-semibold leading-none tracking-tight">{{ fineTune.id }}</h3>
+                                <p class="text-sm text-muted-foreground mt-2">{{ fineTune.model }} <span class="inline-flex items-center rounded-md ms-2 border px-2.5 py-0.5 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground text-xs w-fit">{{ fineTune.status }}</span></p>
+                            </div>
+                            <div class="p-6 pt-0">
+                                <div class="flex space-x-2">
+                                    <div class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 items-center justify-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file h-3 w-3 me-2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+                                        @if(fineTune.training_file != null) {
+                                            <span>{{ getFileName(fineTune.training_file) }}</span> 
+                                        } @else {
+                                            -
+                                        }
+                                    </div>
+                                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 px-4 py-2 shrink-0">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                } @else {
+                    <div class="flex items-center justify-center w-full">
+                        <div class="rounded-lg border bg-muted text-card-foreground shadow w-full mb-3">
+                            <div class="flex flex-col space-y-1.5 p-6">
+                                <h3 class="font-semibold leading-none tracking-tight">{{ fineTune.id }}</h3>
+                                <p class="text-sm text-muted-foreground mt-2">{{ fineTune.model }} <span class="inline-flex items-center rounded-md ms-2 border px-2.5 py-0.5 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground text-xs w-fit">{{ fineTune.status }}</span></p>
+                            </div>
+                            <div class="p-6 pt-0">
+                                <div class="flex space-x-2">
+                                    <div class="flex h-9 w-full rounded-md border border-input bg-muted px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 items-center justify-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file h-3 w-3 me-2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+                                        @if(fineTune.training_file != null) {
+                                            <span>{{ getFileName(fineTune.training_file) }}</span> 
+                                        } @else {
+                                            -
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    </div>
+
+    <div class="relative overflow-x-auto mt-6 hidden lg:block md:block">
         <table class="w-full caption-bottom text-sm">
             <thead class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                 <tr>
@@ -150,7 +201,7 @@
         </div>
     </div>
 
-    <div [class]="drawerOpen ? 'fixed top-0 left-0 z-40 h-screen p-6 overflow-y-auto bg-white w-[80vw] lg:w-[50vw] transition-transform translate-x-0' : 'fixed top-0 left-0 z-40 h-screen p-6 overflow-y-auto bg-white w-[80vw] lg:w-[50vw] transition-transform -translate-x-full'"  tabindex="-1" aria-labelledby="drawer-label">
+    <div [class]="drawerOpen ? 'fixed top-0 left-0 z-40 h-screen p-6 overflow-y-auto bg-white w-screen md:w-[80vw] lg:w-[50vw] transition-transform translate-x-0' : 'fixed top-0 left-0 z-40 h-screen p-6 overflow-y-auto bg-white w-screen md:w-[80vw] lg:w-[50vw] transition-transform -translate-x-full'"  tabindex="-1" aria-labelledby="drawer-label">
         <div class="flex items-center justify-between">
             <p class="text-lg font-semibold text-foreground">Training Overview</p>
             <button type="button" (click)="toggleDrawer()" class="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
@@ -163,7 +214,7 @@
 
         <div>
             <div class="rounded-xl border bg-card text-card-foreground shadow overflow-hidden mt-6" x-chunk="An order details card with order details, shipping information, customer information and payment information.">
-                <div class="space-y-1.5 p-6 flex flex-row items-start bg-muted/50">
+                <div class="space-y-1.5 p-6 flex flex-wrap items-start bg-muted/50">
                     <div class="grid gap-0.5">
                         <h3 class="font-semibold tracking-tight group flex items-center gap-2 text-lg">
                             Fine Tuned Model<br/>{{ selectedItem?.fine_tuned_model }}
