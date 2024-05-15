@@ -223,25 +223,32 @@ export class FineTuneComponent implements OnInit, AfterViewInit, OnDestroy {
         labels: this.metricsData?.steps,
         datasets: [{
           data: this.metricsData?.trainLosses,
-          borderColor: '#000',
+          borderColor: '#406FDC',
           borderWidth: 2,
           pointRadius: 0,
+          pointBackgroundColor: '#FFFF',
         }]
       },
       options: {
         scales: {
           y: {
             beginAtZero: true,
+            border: {
+              display: false,
+            },
             suggestedMax: suggestedMax,
             grid: {
-              display:false
+              color: '#B3B3B3',
             }
           },
           x: {
             display: true,
+            border: {
+              display: false,
+            },
             title: {
               display: true,
-              text: 'Steps'
+              text: ''
             },
             grid: {
               display:false
@@ -252,7 +259,7 @@ export class FineTuneComponent implements OnInit, AfterViewInit, OnDestroy {
         maintainAspectRatio: false,
         elements: {
           line: {
-            tension: 0
+            tension: .2
           }
         },
         hover: {
@@ -261,7 +268,7 @@ export class FineTuneComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         plugins: {
           legend: {
-              display: false
+            display: false
           },
         }
       }

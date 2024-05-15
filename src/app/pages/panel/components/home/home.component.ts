@@ -176,7 +176,7 @@ export class PanelHomeComponent implements OnInit {
           data: this.metricsData?.trainLosses,
           borderColor: '#406FDC',
           borderWidth: 2,
-          pointRadius: 3,
+          pointRadius: 0,
           pointBackgroundColor: '#FFFF',
         }]
       },
@@ -219,7 +219,7 @@ export class PanelHomeComponent implements OnInit {
         },
         plugins: {
           legend: {
-              display: false
+            display: false
           },
         }
       }
