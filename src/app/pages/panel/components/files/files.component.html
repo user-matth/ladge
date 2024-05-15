@@ -32,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-            @if(files.data.length > 0) {
+            @if(files) {
                 @for (file of files.data; track file.id) {
                     <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                         <th class="p-2 align-middle text-start [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] font-medium">
@@ -63,7 +63,6 @@
     </table>
 </div>
 
-
 <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-2xl max-h-full">
         <!-- Modal content -->
@@ -86,8 +85,52 @@
                     Training data. Add a jsonl file to use for training.
                 </p>
                 <form [formGroup]="formGroup">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-right" for="name">File</label>
-                    <input type="file" (change)="fileSelected($event)" class="flex h-10 w-full rounded-md border border-input bg-background p-0 mb-3 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"/>
+                    @if(fileToUpload !== null) {
+                        <div class="relative overflow-x-auto mb-3">
+                            <table class="w-full caption-bottom text-sm">
+                                <thead class="border-b transition-colors">
+                                    <tr>
+                                        <th scope="col" class="h-10 px-0 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                            File
+                                        </th>
+                                        <th scope="col" class="h-10 px-0 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                            Size
+                                        </th>
+                                        <th scope="col" class="h-10 px-0 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                        <td class="p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                            {{ fileToUpload.name }}
+                                        </td>
+                                        <td class="p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                            {{ fileToUpload.size }} bytes
+                                        </td>
+                                        <td class="p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                                            <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm text-red-600 font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-6 w-6" (click)="removeFile()">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2 w-4 h-4"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    } @else {
+                        <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-right" for="name">File</label>
+                        <div class="flex items-center justify-center w-full mb-3">
+                            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500"><span class="font-medium">Click to upload</span> or drag and drop</p>
+                                    <p class="text-xs text-gray-500">JSONL (MAX. 50MB)</p>
+                                </div>
+                                <input id="dropzone-file" type="file" class="hidden" (change)="fileSelected($event)" />
+                            </label>
+                        </div> 
+                    }
 
                     <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-right" for="name">Purpose</label>
                     <select formControlName="purpose" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 col-span-3">
@@ -101,9 +144,9 @@
                 </form>
             </div>
             <!-- Modal footer -->
-            <div class="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+            <div class="flex flex-col-reverse sm:flex-row justify-between sm:space-x-2">
+                <button data-modal-hide="default-modal" type="button" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2">Cancel</button>
                 <button data-modal-hide="default-modal" type="button" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2" (click)="uploadSelectedFile()">Send</button>
-                <button data-modal-hide="default-modal" type="button" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2">Decline</button>
             </div>
         </div>
     </div>

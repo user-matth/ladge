@@ -39,7 +39,7 @@
     <a class="text-sm font-medium transition-colors hover:text-primary cursor-pointer text-nowrap" 
       *ngFor="let item of navItems" 
       [ngClass]="item.active ? 'text-foreground' : 'text-muted-foreground'" 
-      (click)="toggleNavItems(item.label)" 
+      [href]="item.path"
       >
       {{ item.label }}
     </a>
@@ -83,11 +83,11 @@
             <hlm-menu-shortcut>⌘B</hlm-menu-shortcut>
           </button>
 
-          <button hlmMenuItem [brnMenuTriggerFor]="theme">
+          <!-- <button hlmMenuItem [brnMenuTriggerFor]="theme">
             <hlm-icon name="lucidePalette" hlmMenuIcon />
             <span>Theme</span>
             <hlm-menu-item-sub-indicator />
-          </button>
+          </button> -->
 
           <button hlmMenuItem>
             <hlm-icon name="lucidePlus" hlmMenuIcon />
@@ -125,7 +125,7 @@
       </hlm-menu>
     </ng-template>
 
-    <ng-template #theme>
+    <!-- <ng-template #theme>
       <hlm-sub-menu>
         <button hlmMenuItem (click)="toggleMode(true)">
           <hlm-icon name="lucideSun" hlmMenuIcon />
@@ -142,7 +142,7 @@
           <span>System</span>
         </button>
       </hlm-sub-menu>
-    </ng-template>
+    </ng-template> -->
 </div>
 
 <div class="fixed top-0 w-full bg-background/0 backdrop-blur-xl z-10" *ngIf="variant == 'public'">
@@ -155,8 +155,6 @@
       <span class="text-lg font-semibold text-white">Ladge</span>
     </a>
     <div class="flex items-center space-x-4 ms-auto">
-      <a class="text-sm font-medium text-white transition-colors hover:underline">About us</a>
-      <a class="text-sm font-medium text-white transition-colors hover:underline">Our Product</a>
       <a class="text-sm font-medium text-white transition-colors hover:underline" href="/auth/login">Login</a>
     </div>
   </nav>

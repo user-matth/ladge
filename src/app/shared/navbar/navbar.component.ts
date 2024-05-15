@@ -46,7 +46,8 @@ import {
   HlmSubMenuComponent,
 } from '@spartan-ng/ui-menu-helm';
 import Cookies from 'js-cookie';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 type Framework = { label: string; value: string };
 
@@ -108,9 +109,9 @@ export class NavbarComponent implements OnInit {
   @Input() public variant = 'public';
   currentUser: any | null = null;
   navItems = [
-    { label: 'Overview', path: '/panel', active: true},
-    { label: 'Files', path: '/panel/files', active: false },
+    { label: 'Overview', path: '/panel', active: false },
     { label: 'Fine Tune', path: '/panel/fine-tune', active: false },
+    { label: 'Files', path: '/panel/files', active: false },
   ]
 
   constructor(
@@ -121,7 +122,19 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserFromCookies();
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.updateNavItemsActiveState();
+    });
+    this.updateNavItemsActiveState();
   }
+
+  updateNavItemsActiveState() {
+    this.navItems.forEach(item => {
+      item.active = this.router.url === item.path;
+    });
+  }  
 
   loadUserFromCookies() {
     const user = Cookies.get('user');

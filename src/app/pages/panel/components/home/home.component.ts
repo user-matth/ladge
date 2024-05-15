@@ -28,6 +28,7 @@ export class PanelHomeComponent implements OnInit {
   getEnvironmentNews() {
     this.http.get('https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=12&busca=meio%2Fambiente').subscribe(news => {
       this.news = news;
+      console.log(news);
     });
   }
 
@@ -37,19 +38,38 @@ export class PanelHomeComponent implements OnInit {
     });
   }
 
-  getTest() {
-    this.http.get('https://teste.4selet.com.br/api/buscas/dados-zoom/LgFicv02HSHuuMukdska3hLqUBAsZ1Er4QPSeSsO', {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer 206990e331c4fd47f68494777a6aee4c43a5af6e4b3c431eb4fdc06822347d8a93639cbebce290b1e7e30c670fdb0347242225e7c8fa736ed4fabc318e46aa73"
-      }
-    }).subscribe(response => {
-      console.log(response);
-    });
-  }
-
   openNews(link: string) {
     window.open(link, '_blank');
+  }
+
+  saveDatasetInJsonl(): void {
+    const items = this.all_news.items;
+  
+    const jsonlContent = items.map((item: any) => {
+      const initialSystemContent = "Ladge is a environment journalist.";
+      const userQuery = `Tell me ${item.type} news about the environment`;
+      const assistantResponse = item.introducao + " - Foto: " + item.foto;
+  
+      return JSON.stringify({
+        messages: [
+          { role: "system", content: initialSystemContent },
+          { role: "user", content: userQuery },
+          { role: "assistant", content: assistantResponse }
+        ]
+      });
+    }).join('\n');
+  
+    this.downloadFile(jsonlContent, 'environment_news.jsonl');
+  }  
+
+  private downloadFile(content: string, filename: string): void {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
   }
 
 }

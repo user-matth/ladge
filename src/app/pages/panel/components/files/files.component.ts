@@ -62,17 +62,6 @@ export class FilesComponent implements OnInit {
     });
   }
 
-  getTest() {
-    this.http.get('https://teste.4selet.com.br/api/buscas/dados-zoom/LgFicv02HSHuuMukdska3hLqUBAsZ1Er4QPSeSsO', {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer 206990e331c4fd47f68494777a6aee4c43a5af6e4b3c431eb4fdc06822347d8a93639cbebce290b1e7e30c670fdb0347242225e7c8fa736ed4fabc318e46aa73"
-      }
-    }).subscribe(response => {
-      console.log(response);
-    });
-  }
-
   openNews(link: string) {
     window.open(link, '_blank');
   }
@@ -87,6 +76,10 @@ export class FilesComponent implements OnInit {
     } else {
       alert('Please select a file and enter a purpose.');
     }
+  }
+
+  removeFile() {  
+    this.fileToUpload = null;
   }
 
 }

@@ -1,4 +1,11 @@
-<h2 class="text-3xl font-semibold tracking-tight text-foreground">Overview</h2>
+<div class="flex justify-between items-center">
+  <h2 class="text-3xl font-semibold tracking-tight text-foreground">Overview</h2>
+  <button type="button" (click)="saveDatasetInJsonl()" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file h-4 w-4 me-2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+    Exportar
+  </button>
+</div>
+
 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6">
   <div class="rounded-lg border border-input bg-card text-card-foreground shadow-sm">
     <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
