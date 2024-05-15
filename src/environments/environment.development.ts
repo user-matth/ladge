@@ -9,5 +9,5 @@ export const environment = {
         appId: "1:1063418298721:web:073a9658a51ee0477c4520",
         measurementId: "G-07Y1LJ0ZSL"
     },
-    OPENAI_API_KEY: "sk-proj-De6u5sZWORB1oZh2LqlST3BlbkFJEzMYDAhRTWP7EJvxVgzB"
+    OPENAI_API_KEY: "sk-proj-Eg2rtQQN8NVSeCaRBSwcT3BlbkFJ3BxTcYvpCkMHS6qjHWLr"
 };

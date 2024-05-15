@@ -28,8 +28,14 @@
 </div>
 
 <h2 class="text-xl font-medium tracking-tight mt-6 mb-3 text-foreground">Last fine-tune <span class="text-xl font-medium tracking-tight mt-6 mb-3 text-muted-foreground">{{ fineTuneData?.model }}</span></h2>
-<div class="h-[20rem!important]">
-  <canvas #mainChart></canvas>
+
+<div class="flex flex-col-reverse lg:flex-row">
+  <div class="h-[16rem!important]">
+    <canvas #pieChart></canvas>
+  </div>    
+  <div class="h-[20rem!important] w-full p-0 lg:ps-6">
+    <canvas #mainChart></canvas>
+  </div>
 </div>
 
 <h2 class="text-xl font-medium tracking-tight mt-6 text-foreground">Latest News</h2>

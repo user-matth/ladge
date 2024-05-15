@@ -3,7 +3,7 @@ import { IbgeService } from '../../../../services/ibge/ibge.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../../environments/environment.development';
-import { Chart, registerables } from 'chart.js';
+import { Chart, PieControllerChartOptions, registerables } from 'chart.js';
 
 @Component({
   selector: 'app-home',
@@ -18,13 +18,17 @@ import { Chart, registerables } from 'chart.js';
 export class PanelHomeComponent implements OnInit {
 
   @ViewChild('mainChart') mainChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('pieChart') pieChart!: ElementRef<HTMLCanvasElement>;
 
   news: any;
   all_news: any;
   fineTuneData: any;
   fineTuneEvents: any;
   metricsData: any;
+  pieMetricsData: any;
   chart!: Chart; 
+  pieChartInstance!: Chart<'pie', number[], string>;
+  pieChartData: any;
 
   constructor(private http: HttpClient) {
     Chart.register(...registerables);
@@ -34,6 +38,7 @@ export class PanelHomeComponent implements OnInit {
     this.getEnvironmentNews();
     this.getAllNews();
     this.retrieveFineTune();
+    this.getTunedData();
   }
 
   getEnvironmentNews() {
@@ -106,6 +111,47 @@ export class PanelHomeComponent implements OnInit {
       this.processMetricsData(fineTuneEvents);
     });
   }
+  
+  getTunedData() {
+    this.http.post<any>(`https://api.openai.com/v1/chat/completions`, {
+      "model": "gpt-3.5-turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Based on the recent news, give two percentage, the total has to be 100% and you must return the good news percentage and bad news percentage"
+        }
+      ],
+      "temperature": 1,
+      "top_p": 1,
+      "n": 1,
+      "stream": false,
+      "max_tokens": 250,
+      "presence_penalty": 0,
+      "frequency_penalty": 0
+    }, {
+      headers: {
+        "Authorization": `Bearer ${environment.OPENAI_API_KEY}`
+      }
+    }).subscribe(data => {
+      this.pieChartData = data;
+      this.processPieData(data);
+      console.log(data);
+    });
+  }
+
+  processPieData(response: any) {
+    const goodNewsPercentage = response.goodNewsPercentage;
+    const badNewsPercentage = response.badNewsPercentage;
+    
+    this.pieMetricsData = {
+      good: 70,
+      bad: 30,
+      yes: 30,
+      no: 30,
+    };
+    
+    this.setupPieChart();
+  }
 
   processMetricsData(response: any) {
     const metrics = response.data.filter((event: any) => event.type === 'metrics');
@@ -130,13 +176,17 @@ export class PanelHomeComponent implements OnInit {
           data: this.metricsData?.trainLosses,
           borderColor: '#406FDC',
           borderWidth: 2,
-          pointRadius: 0,
+          pointRadius: 3,
+          pointBackgroundColor: '#FFFF',
         }]
       },
       options: {
         scales: {
           y: {
             beginAtZero: true,
+            border: {
+              display: false,
+            },
             suggestedMax: suggestedMax,
             grid: {
               color: '#B3B3B3',
@@ -144,9 +194,12 @@ export class PanelHomeComponent implements OnInit {
           },
           x: {
             display: true,
+            border: {
+              display: false,
+            },
             title: {
               display: true,
-              text: 'Steps'
+              text: ''
             },
             grid: {
               display:false
@@ -172,5 +225,37 @@ export class PanelHomeComponent implements OnInit {
       }
     });
   }
+
+  setupPieChart(): void {
+    const ctx = this.pieChart.nativeElement.getContext('2d');
+  
+    this.pieChartInstance = new Chart(ctx!, {
+      type: 'pie', 
+      data: {
+        labels: ['Good News', 'Bad News'], 
+        datasets: [{
+          data: [this.pieMetricsData.good, this.pieMetricsData.bad], 
+          backgroundColor: ['#047cfe', '#ff9501'], 
+          borderColor: ['#fff'], 
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+            position: 'top'
+          },
+          tooltip: {
+            enabled: true,
+            mode: 'index',
+            intersect: false
+          }
+        }
+      }
+    });
+  }  
 
 }
