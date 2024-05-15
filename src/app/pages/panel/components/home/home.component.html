@@ -38,6 +38,12 @@
   </div>
 </div>
 
+<h2 class="text-xl font-medium tracking-tight mt-6 mb-3 text-foreground">Last 5 days <span class="text-xl font-medium tracking-tight mt-6 mb-3 text-muted-foreground">{{ fineTuneData?.model }}</span></h2>
+
+<div class="h-screen w-full p-0 lg:ps-6">
+  <canvas #trainingResultsChart></canvas>
+</div>
+
 <h2 class="text-xl font-medium tracking-tight mt-6 text-foreground">Latest News</h2>
 <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3 mt-6" *ngIf="news">
   <a class="flex flex-col items-start border-input justify-between gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent"

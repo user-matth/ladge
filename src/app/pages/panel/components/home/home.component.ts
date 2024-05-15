@@ -19,6 +19,9 @@ export class PanelHomeComponent implements OnInit {
 
   @ViewChild('mainChart') mainChart!: ElementRef<HTMLCanvasElement>;
   @ViewChild('pieChart') pieChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('trainingResultsChart') trainingResultsChart!: ElementRef<HTMLCanvasElement>;
+
+  consolidatedMetricsData: any = { steps: [], trainLosses: [], trainAccuracies: [], totalSteps: [] };
 
   news: any;
   all_news: any;
@@ -26,9 +29,17 @@ export class PanelHomeComponent implements OnInit {
   fineTuneEvents: any;
   metricsData: any;
   pieMetricsData: any;
-  chart!: Chart; 
+  chart!: Chart;
   pieChartInstance!: Chart<'pie', number[], string>;
   pieChartData: any;
+  jobsFiveDays = [
+    "ftjob-vWQDnNo4PfXCXmenlwiUB32B",
+    "ftjob-BI6b7ZbJxNbssO1viGe7TCkt",
+    "ftjob-NumzsePsEzqt2M9XBofQwavZ",
+    "ftjob-4J3DBFTTCqNC8Xm4WxacLgSn",
+    "ftjob-c6clI5s09van3IFfz0SzB85T"
+  ];
+  jobResults: any = {};
 
   constructor(private http: HttpClient) {
     Chart.register(...registerables);
@@ -38,6 +49,9 @@ export class PanelHomeComponent implements OnInit {
     this.getEnvironmentNews();
     this.getAllNews();
     this.retrieveFineTune();
+    this.jobsFiveDays.forEach(jobId => {
+      this.retrieveFiveFineTuneEvents(jobId);
+    });
     this.getTunedData();
   }
 
@@ -101,6 +115,17 @@ export class PanelHomeComponent implements OnInit {
     this.retrieveFineTuneEvents(id);
   }
 
+  retrieveFiveFineTuneEvents(id: string) {
+    this.http.get<any>(`https://api.openai.com/v1/fine_tuning/jobs/${id}/events`, {
+      headers: {
+        "Authorization": `Bearer ${environment.OPENAI_API_KEY}`
+      }
+    }).subscribe(response => {
+      this.processFiveMetricsData(id, response);
+      console.log(response);
+    });
+  }
+
   retrieveFineTuneEvents(id: string) {
     this.http.get<any>(`https://api.openai.com/v1/fine_tuning/jobs/${id}/events`, {
       headers: {
@@ -114,7 +139,7 @@ export class PanelHomeComponent implements OnInit {
   
   getTunedData() {
     this.http.post<any>(`https://api.openai.com/v1/chat/completions`, {
-      "model": "gpt-3.5-turbo",
+      "model": "ft:gpt-3.5-turbo-0125:personal::9P0425Fl",
       "messages": [
         {
           "role": "user",
@@ -144,10 +169,8 @@ export class PanelHomeComponent implements OnInit {
     const badNewsPercentage = response.badNewsPercentage;
     
     this.pieMetricsData = {
-      good: 70,
-      bad: 30,
-      yes: 30,
-      no: 30,
+      good: goodNewsPercentage,
+      bad: badNewsPercentage,
     };
     
     this.setupPieChart();
@@ -162,6 +185,99 @@ export class PanelHomeComponent implements OnInit {
       totalSteps: metrics.map((m: any) => m.data.total_steps)
     };
     this.setupChart();
+  }
+
+  processFiveMetricsData(id: string, response: any) {
+    const metrics = response.data.filter((event: any) => event.type === 'metrics');
+    this.jobResults[id] = {
+      steps: metrics.map((m: any) => m.data.step),
+      trainLosses: metrics.map((m: any) => m.data.train_loss)
+    };
+
+    // Only setup chart when all jobs have been processed
+    if (Object.keys(this.jobResults).length === this.jobsFiveDays.length) {
+      this.setupTrainingResultsChart();
+    }
+  }
+
+  setupTrainingResultsChart(): void {
+    const ctx = this.trainingResultsChart.nativeElement.getContext('2d');
+    const colors = ['#ff3c2f', '#ff9400', '#007aff', '#af52df', '#ff2c56']; // Example colors
+    const datasets = this.jobsFiveDays.map((jobId, index) => ({
+      label: `Job ID: ${jobId}`,
+      data: this.jobResults[jobId].trainLosses,
+      borderColor: colors[index],
+      fill: false,
+      borderWidth: 2,
+      pointRadius: 0,
+      pointBackgroundColor: '#FFFF',
+    }));
+
+    const chart = new Chart(ctx!, {
+      type: 'line',
+      data: {
+        labels: this.jobResults[this.jobsFiveDays[0]].steps, // Assuming all jobs have the same step labels
+        datasets: datasets
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            border: {
+              display: false,
+            },
+            grid: {
+              color: '#B3B3B3',
+            }
+          },
+          x: {
+            display: true,
+            border: {
+              display: false,
+            },
+            title: {
+              display: true,
+              text: ''
+            },
+            grid: {
+              display:false
+            }
+          }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        elements: {
+          line: {
+            tension: .2
+          }
+        },
+        hover: {
+          mode: 'index',
+          intersect: false,
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom',
+            align: 'center',
+            labels: {
+              usePointStyle: true,
+              pointStyle: 'circle',
+              boxWidth: 10,
+              boxHeight: 10,
+              padding: 20,
+              font: {
+                size: 12,
+                family: 'Inter',
+                style: 'normal',
+                lineHeight: 1.2
+              },
+              color: '#000000',
+            }
+          },
+        },
+      }
+    });
   }
 
   setupChart(): void {
@@ -234,7 +350,7 @@ export class PanelHomeComponent implements OnInit {
       data: {
         labels: ['Good News', 'Bad News'], 
         datasets: [{
-          data: [this.pieMetricsData.good, this.pieMetricsData.bad], 
+          data: [72, 38], 
           backgroundColor: ['#047cfe', '#ff9501'], 
           borderColor: ['#fff'], 
           borderWidth: 2
